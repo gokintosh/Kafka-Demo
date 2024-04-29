@@ -1,0 +1,80 @@
+version: "3.8"
+
+services:
+  kafka-1:
+    image: bitnami/kafka:latest
+    ports: 
+      - "9092:9092"
+    
+    # envirinment 
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_KRAFT_CLUSTER_ID=PwJ8Ix8vRiakigduJhXaYQ
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      # controller quorum voter is a node or brocker that oversees the state of the cluster and proer dtata replication. 
+      # The port number should be different from the one provided for the service
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091
+
+      # KAFKA configuration properties connected with listeners
+      # the plaintext communication internal to the cluster and non encrypted. controller is used for internal coordination among brokers
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9092
+      # Advertised listeners are port where the client talk with
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9090,EXTERNAL://${HOSTNAME:-localhost}:9092
+      # with the below command we specify the security protocol
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INNER_BROKER_LISTENER_NAME=PLAINTEXT
+    volumes:
+      - /Users/gokulnair/workspace/volume/server-1:/bitnami/kafka
+
+  kafka-2:
+    image: bitnami/kafka:latest
+    ports: 
+      - "9094:9094"
+    
+    # envirinment 
+    environment:
+      - KAFKA_CFG_NODE_ID=2
+      - KAFKA_KRAFT_CLUSTER_ID=PwJ8Ix8vRiakigduJhXaYQ
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      # controller quorum voter is a node or brocker that oversees the state of the cluster and proer dtata replication. 
+      # The port number should be different from the one provided for the service
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091
+
+      # KAFKA configuration properties connected with listeners
+      # the plaintext communication internal to the cluster and non encrypted. controller is used for internal coordination among brokers
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9094
+      # Advertised listeners are port where the client talk with
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9090,EXTERNAL://${HOSTNAME:-localhost}:9094
+      # with the below command we specify the security protocol
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INNER_BROKER_LISTENER_NAME=PLAINTEXT
+    volumes:
+      - /Users/gokulnair/workspace/volume/server-2:/bitnami/kafka
+
+  kafka-3:
+    image: bitnami/kafka:latest
+    ports: 
+      - "9096:9096"
+    
+    # envirinment 
+    environment:
+      - KAFKA_CFG_NODE_ID=3
+      - KAFKA_KRAFT_CLUSTER_ID=PwJ8Ix8vRiakigduJhXaYQ
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      # controller quorum voter is a node or brocker that oversees the state of the cluster and proer dtata replication. 
+      # The port number should be different from the one provided for the service
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9091,2@kafka-2:9091,3@kafka-3:9091
+
+      # KAFKA configuration properties connected with listeners
+      # the plaintext communication internal to the cluster and non encrypted. controller is used for internal coordination among brokers
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9096
+      # Advertised listeners are port where the client talk with
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-3:9090,EXTERNAL://${HOSTNAME:-localhost}:9096
+      # with the below command we specify the security protocol
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INNER_BROKER_LISTENER_NAME=PLAINTEXT
+    volumes:
+      - /Users/gokulnair/workspace/volume/server-3:/bitnami/kafka
